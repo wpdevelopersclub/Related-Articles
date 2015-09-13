@@ -1,6 +1,6 @@
 <span <?php echo genesis_attr( 'entry-author' ); ?>>
 	<a href="<?php echo $this->author_url; ?>" <?php echo $this->link_attr; ?>>
-		<?php echo get_avatar( $this->author_id, $this->config['avatar_size'], '', $this->author_name ); ?>
+		<?php echo get_avatar( $this->author_id, $this->config->avatar_size, '', $this->author_name ); ?>
 	</a>
 	<a href="<?php echo $this->author_url; ?>" <?php echo $this->link_attr; ?>>
 		<span <?php echo genesis_attr( 'entry-author-name' ); ?>>

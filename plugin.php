@@ -37,7 +37,8 @@
 	Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-use WPDevsClub_Core\Models\I_Model;
+use WPDevsClub_Core\I_Core;
+use WPDevsClub_Core\Config\I_Config;
 
 // Oh no you don't. Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) {
@@ -56,23 +57,34 @@ if ( ! defined( 'WPDC_RELATED_ARTICLES_URL' ) ) {
 	define( 'WPDC_RELATED_ARTICLES_URL', $plugin_url );
 }
 
-//require_once( __DIR__ . '/assets/vendor/autoload.php' );
-require_once( __DIR__ . '/class-related.php' );
+require_once( __DIR__ . '/assets/vendor/autoload.php' );
 
-if ( version_compare( $GLOBALS['wp_version'], Related::MIN_WP_VERSION, '>' ) ) {
-
-	add_action( 'wpdevsclub_do_related_articles', __NAMESPACE__ . '\\init_related', 10, 3 );
-	/**
-	 * Instantiate the class
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param I_Model   $model          Data model
-	 * @param int       $post_id        Post ID
-	 * @param array     $config         Configuration parameters
-	 * @return null
-	 */
-	function init_related( I_Model $model, $post_id, array $config = array() ) {
-		new Related( $model, $post_id, $config );
+add_action( 'wpdevclub_setup_related_articles', __NAMESPACE__ . '\\launch', 20 );
+/**
+ * Instantiate the class
+ *
+ * @since 1.0.0
+ *
+ * @param I_Config $config Configuration parameters
+ * @param I_Core $core Instance of Core
+ * @return null
+ */
+function launch( I_Config $config, I_Core $core = null  ) {
+	if ( version_compare( $GLOBALS['wp_version'], Related::MIN_WP_VERSION, '>' ) ) {
+		new Related( $config, $core );
 	}
 }
+
+/**
+ * Load up the plugin's variables within the Container
+ *
+ * @since 1.1.0
+ *
+ * @return null
+ */
+add_action( 'wpdevsclub_do_service_providers', function( $core ) {
+	$core['related.dir'] = WPDC_RELATED_ARTICLES_DIR;
+	$core['related.url'] = WPDC_RELATED_ARTICLES_URL;
+	$core['related.config.plugin'] = WPDC_RELATED_ARTICLES_DIR . 'config/plugin.php';
+	$core['related.config.defaults'] = WPDC_RELATED_ARTICLES_DIR . 'config/defaults.php';
+} );
