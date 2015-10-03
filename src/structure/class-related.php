@@ -4,7 +4,7 @@
  * Related Article
  *
  * @package     WPDC_Related_Articles\Structures
- * @since       1.1.0
+ * @since       1.2.0
  * @author      WPDevelopersClub and hellofromTonya
  * @link        https://wpdevelopersclub.com/
  * @license     GNU General Public License 2.0+
@@ -22,7 +22,7 @@ class Related extends Structure {
 	 *
 	 * @var string
 	 */
-	const VERSION = '1.0.0';
+	const VERSION = '1.2.0';
 
 	/**
 	 * The plugin's minimum WordPress requirement
@@ -91,7 +91,10 @@ class Related extends Structure {
 
 			while ( $query->have_posts() ) : $query->the_post();
 				$this->core['related.post_id'] = get_the_ID();
+
 				$post_info = $this->core['related.post_info'];
+
+				$this->model = $this->core['related.model'];
 
 				$this->load_view( 'main' );
 			endwhile;
@@ -223,7 +226,7 @@ class Related extends Structure {
 	 * @return string
 	 */
 	protected function render_subtitle() {
-		return $this->core['related.model']->get_subtitle();
+		return $this->model->get_subtitle();
 	}
 
 	/**
@@ -245,7 +248,7 @@ class Related extends Structure {
 	 * @return null
 	 */
 	protected function render_tldr() {
-		$content = wp_kses_post( $this->core['related.model']->get_meta('_tldr') );
+		$content = wp_kses_post( $this->model->get_meta('_tldr') );
 		echo wpdevsclub_word_limiter( $content );
 	}
 

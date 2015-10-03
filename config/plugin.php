@@ -4,7 +4,7 @@
  * Related Service Providers
  *
  * @package     WPDC_Related_Articles
- * @since       1.0.0
+ * @since       1.2.0
  * @author      WPDevelopersClub and hellofromTonya
  * @link        https://wpdevelopersclub.com/
  * @license     GNU General Public License 2.0+
@@ -38,9 +38,9 @@ return array(
 	'fe_service_providers'      => array(
 		'related.model'         => array(
 			'autoload'          => false,
-			'concrete'          => function( $container ) {
-				return new Model( new Arr_Config( $container['config']->model ), $container['post_id'] );
-			},
+			'concrete'          => $core->factory( function( $container ) {
+				return new Model( new Arr_Config( $container['config']->model ), $container['related.post_id'] );
+			} ),
 		),
 		'related.post_info' => array(
 			'autoload'      => false,
